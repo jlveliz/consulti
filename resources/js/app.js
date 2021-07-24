@@ -12,4 +12,36 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-require('./components/Example');
+ import React from "react";
+ import ReactDOM from "react-dom";
+ import { BrowserRouter, Route, Switch } from "react-router-dom";
+
+ import Home from "./components/Home";
+ import Login from "./components/Login";
+ import MakeComment from "./components/MakeComment";
+
+
+ // any CSS you import will output into a single css file (app.css in this case)
+ import 'bootstrap/dist/css/bootstrap.min.css';
+//  import "./styles/app.css";
+
+ // start the Stimulus application
+ import "./bootstrap";
+
+ ReactDOM.render(
+
+   <BrowserRouter>
+     <Switch>
+       <Route exact path="/">
+         <Login />
+       </Route>
+       <Route path="/home" otherwise="/">
+         <Home />
+       </Route>
+       <Route path="/crear-comentario" otherwise="/">
+         <MakeComment />
+       </Route>
+     </Switch>
+   </BrowserRouter>,
+   document.getElementById("example")
+ );

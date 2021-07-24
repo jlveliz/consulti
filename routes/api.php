@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+
+Route::post('login','Auth\LoginController@login');
+
+Route::get('list-commnets/{userId}','CommentController@index');
+Route::resource('comments', CommentController::class)->only(['store','show','update','destroy']);
+Route::resource('users', UserController::class)->only(['index','store','show','update','destroy']);

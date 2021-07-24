@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -19,7 +22,7 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    //use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login.
@@ -36,5 +39,38 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+
+
+    public function login(Request $request) {
+
+
+        $validation = $this->validator($request->all());
+
+        if($validation->fails())  return response()->json(['message' => $validation->errors()->all()], 400);
+
+
+        $user = User::where('email', $request->get('email'))->where('password', $request->get('password'))->first();
+
+        if($user) return response()->json(['data' =>$user]);
+
+        return response()->json(['message' => 'credenciales invalidas'],404);
+
+    }
+
+
+      /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['required', 'string','min:8'],
+        ]);
     }
 }
